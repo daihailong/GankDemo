@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <hailongs.cn.utils.BannerView
+        android:id="@+id/bv_viewpager"
+        android:layout_width="match_parent"
+        android:layout_height="192dp" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:paddingTop="16dp"
+        android:paddingBottom="12dp"
+        android:layout_gravity="bottom"
+        android:background="@color/indicatorBackground">
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:singleLine="true"
+            android:text="随着 Android 引入 Java 8 的一些功能，请记住每一个标准库的 API 和语言特性都会带来一些相关的开销，这很重要。虽然设备越来越快而且内存越来越多，代码大小和性能优化之间仍然是有着紧密关联的。"
+            android:textColor="@color/colorWindowBackground"
+            android:textSize="14sp" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="14dp"
+            android:layout_alignParentBottom="true">
+
+            <TextView
+                android:id="@+id/tv_author"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:text="via Chen MuLong"
+                android:textColor="@color/colorWindowBackground"
+                android:textSize="12sp" />
+
+            <LinearLayout
+                android:id="@+id/ly_indicator"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:layout_centerInParent="true"
+                android:orientation="horizontal"/>
+
+                <!--<ImageView-->
+                    <!--android:layout_width="6dp"-->
+                    <!--android:layout_height="6dp"-->
+                    <!--android:layout_gravity="center"-->
+                    <!--android:layout_margin="4dp"-->
+                    <!--android:src="@mipmap/ic_dot_un_select"/>-->
+                <!--<ImageView-->
+                    <!--android:layout_width="6dp"-->
+                    <!--android:layout_height="6dp"-->
+                    <!--android:layout_gravity="center"-->
+                    <!--android:layout_margin="4dp"-->
+                    <!--android:src="@mipmap/ic_dot_selected"/>-->
+            <!--</LinearLayout>-->
+
+            <TextView
+                android:id="@+id/tv_pub_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:text="2016-11-23"
+                android:textColor="@color/colorWindowBackground"
+                android:textSize="12sp" />
+        </RelativeLayout>
+        <!--<LinearLayout
+            android:id="@+id/indicator"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:padding="10dp"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/numIndicator"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentRight="true"
+            android:layout_margin="8dp"
+            android:background="@drawable/black_background"
+            android:gravity="center"
+            android:text="1/1"
+            android:textColor="#ffffff"
+            android:visibility="gone" />
+
+        <LinearLayout
+            android:id="@+id/titleView"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_below="@+id/indicator"
+            android:background="#44000000"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/bannerTitle"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1000"
+                android:ellipsize="marquee"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:gravity="center_vertical"
+                android:paddingLeft="10dp"
+                android:singleLine="true"
+                android:textColor="#ffffff"
+                android:visibility="gone" />
+
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp">
+
+                <TextView
+                    android:id="@+id/numIndicatorInside"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:text="1/1"
+                    android:textColor="#ffffff"
+                    android:visibility="gone" />
+
+                <LinearLayout
+                    android:id="@+id/indicatorInside"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:visibility="gone" />
+            </FrameLayout>
+        </LinearLayout>-->
+    </RelativeLayout>
+</FrameLayout>
