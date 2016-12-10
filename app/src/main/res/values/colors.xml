@@ -1,6 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorPrimary">#4D6992</color>
+    <color name="colorPrimaryDark">#375683</color>
     <color name="colorAccent">#FF4081</color>
+    <!--87%透明度-->
+    <color name="secondTextColor">#DD000000</color>
+    <color name="primaryTextColor">#000000</color>
+    <color name="thirdTextColor">#DD4A4A4A</color>
+    <color name="colorWindowBackground">#FFFFFFFF</color>
+
+    <!--70%透明度-->
+    <color name="unSelectedColor">#B1FFFFFF</color>
+    <color name="selectedColor">#FFFFFFFF</color>
+
+    <color name="colorDivider">#3C4A4A4A</color>
+
+    <color name="indicatorBackground">#6B000000</color>
 </resources>
