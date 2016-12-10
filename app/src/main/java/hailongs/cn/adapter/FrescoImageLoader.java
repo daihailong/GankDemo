@@ -12,14 +12,15 @@ import com.facebook.drawee.view.SimpleDraweeView;
 
 public class FrescoImageLoader extends ImageLoader {
     @Override
-    public void displayImage(Context context, Object path, ImageView imageView) {
-        Uri uri = Uri.parse((String) path);
+    public void displayImage(Context context, Object path, final ImageView imageView) {
+        final Uri uri = Uri.parse((String) path);
         imageView.setImageURI(uri);
     }
 
     @Override
     public ImageView createImageView(Context context) {
         SimpleDraweeView simpleDraweeView = new SimpleDraweeView(context);
+        simpleDraweeView.setScaleType(ImageView.ScaleType.FIT_CENTER);
         return simpleDraweeView;
     }
 }

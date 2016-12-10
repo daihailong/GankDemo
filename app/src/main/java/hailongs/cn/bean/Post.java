@@ -1,5 +1,10 @@
 package hailongs.cn.bean;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -32,7 +37,7 @@ public class Post {
         this.results = results;
     }
 
-    public static class ResultsBean {
+    public static class ResultsBean implements Parcelable {
         /**
          * _id : 5833c3b3421aa926e43aef90
          * createdAt : 2016-11-22T12:04:03.555Z
@@ -56,6 +61,7 @@ public class Post {
         private boolean used;
         private String who;
         private List<String> images;
+
 
         public String get_id() {
             return _id;
@@ -138,19 +144,59 @@ public class Post {
         }
 
         @Override
-        public String toString() {
-            return "ResultsBean{" +
-                    "_id='" + _id + '\'' +
-                    ", createdAt='" + createdAt + '\'' +
-                    ", desc='" + desc + '\'' +
-                    ", publishedAt='" + publishedAt + '\'' +
-                    ", source='" + source + '\'' +
-                    ", type='" + type + '\'' +
-                    ", url='" + url + '\'' +
-                    ", used=" + used +
-                    ", who='" + who + '\'' +
-                    ", images=" + images +
-                    '}';
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeString(_id);
+            dest.writeString(createdAt);
+            dest.writeString(desc);
+            dest.writeString(publishedAt);
+            dest.writeString(source);
+            dest.writeString(type);
+            dest.writeString(url);
+            dest.writeInt((used ? 1 : 0));
+            dest.writeString(who);
+            String[] imageArr = new String[images.size()];
+            for (int index = 0; index < images.size(); index++) {
+                imageArr[index] = images.get(index);
+            }
+            dest.writeStringArray(imageArr);
+        }
+
+        public static final Parcelable.Creator<ResultsBean> CREATOR = new Parcelable.Creator<ResultsBean>() {
+
+            @SuppressWarnings("unchecked")
+            @Override
+            public ResultsBean createFromParcel(Parcel source) {
+                return new ResultsBean(source);
+            }
+
+            @Override
+            public ResultsBean[] newArray(int size) {
+                return new ResultsBean[size];
+            }
+
+        };
+
+        public ResultsBean(Parcel bean) {
+            _id = bean.readString();
+            createdAt = bean.readString();
+            desc = bean.readString();
+            publishedAt = bean.readString();
+            source = bean.readString();
+            type = bean.readString();
+            url = bean.readString();
+            used = (bean.readInt() == 1) ? true : false;
+            who = bean.readString();
+            String[] imageArr = bean.createStringArray();
+            List<String> list = new ArrayList<>();
+            for (int index = 0; index < imageArr.length; index++) {
+                list.add(imageArr[index]);
+            }
+            images = list;
         }
     }
 }

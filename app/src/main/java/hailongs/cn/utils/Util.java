@@ -8,8 +8,8 @@ import com.orhanobut.logger.Logger;
 
 public class Util {
     public static String formatDate(String date) {
-        Logger.i("date length = " + date);
-        Logger.i("date = null ? " + (date == null));
+        //Logger.i("date length = " + date);
+        //Logger.i("date = null ? " + (date == null));
         String formatDate = new String(date.substring(0,10));
         return formatDate;
     }
