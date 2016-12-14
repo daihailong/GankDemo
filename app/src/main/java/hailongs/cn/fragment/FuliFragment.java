@@ -5,8 +5,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,10 +26,13 @@ import hailongs.cn.utils.Constants;
 import hailongs.cn.utils.Util;
 
 /**
- * Created by dhl on 2016/12/4.
+ * Created by dhl on 2016/12/13.
  */
 
-public class AndroidFragment extends BasicFragment implements IPostView {
+public class FuliFragment extends BasicFragment implements IPostView {
+
+    //这个得改一改
+    //改成照片墙的样子
 
     @Bind(R.id.srf_ly)
     SwipeRefreshLayout srf_layout;
@@ -39,14 +44,14 @@ public class AndroidFragment extends BasicFragment implements IPostView {
     private boolean isHasLoadOnce = false;
 
     private IPostPresenter presenter;
-    static AndroidFragment fragment = null;
+    static FuliFragment fragment = null;
     static Bundle bundle = null;
 
     int time = 0;
 
-    public static AndroidFragment newInstance(String tag) {
+    public static FuliFragment newInstance(String tag) {
         if (fragment == null) {
-            fragment = new AndroidFragment();
+            fragment = new FuliFragment();
         }
         if (bundle == null) {
             bundle = new Bundle();
@@ -87,11 +92,9 @@ public class AndroidFragment extends BasicFragment implements IPostView {
             rootView = inflater.inflate(R.layout.post_content, container, false);
             ButterKnife.bind(this, rootView);
             mContext = rootView.getContext();
-            Logger.i("recyclerview = null ? " + (mRecyclerView == null));
             initViews(rootView);
             isPrepared = true;
         }
-        Logger.i("recyclerview = null 吗? " + (mRecyclerView == null));
         ViewGroup parent = (ViewGroup) rootView.getParent();
         if (parent != null) {
             parent.removeView(rootView);
@@ -131,10 +134,7 @@ public class AndroidFragment extends BasicFragment implements IPostView {
         super.onDestroy();
         Logger.i("调用A onDestroy");
         Logger.i("调用A onDestroyView");
-        ViewGroup parent = null;
-        if (rootView != null) {
-            parent = (ViewGroup) rootView.getParent();
-        }
+        ViewGroup parent = (ViewGroup) rootView.getParent();
         if (parent != null) {
             parent.removeView(rootView);
         }
@@ -156,7 +156,7 @@ public class AndroidFragment extends BasicFragment implements IPostView {
                 Logger.i("recyclerview == null");
             }
         }
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(mContext));
+        mRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
         presenter = new PostPresenter(this, mContext);
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -166,21 +166,14 @@ public class AndroidFragment extends BasicFragment implements IPostView {
 
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-//                LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
-//                int lastItem = linearLayoutManager.findLastCompletelyVisibleItemPosition();
-//                int allItem = linearLayoutManager.getItemCount() - 2;
-//                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-//                    if (lastItem >= allItem) {
-//                        //拉取数据
-//                        loadMore();
-//                    }
-//                }
                 boolean isSlideToBottom = Util.isSlideToBottom(recyclerView);
                 if (isSlideToBottom) {
                     loadMore();
+                    Logger.e("到底了");
                 }
             }
         });
+        srf_layout.setRefreshing(true);
         srf_layout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -192,7 +185,7 @@ public class AndroidFragment extends BasicFragment implements IPostView {
 
     @Override
     public void getDatas() {
-        presenter.getPostList(Constants.ANDROID, mRecyclerView, true);
+        presenter.getPostList(Constants.FULI, mRecyclerView, true);
         isHasLoadOnce = true;
     }
 
@@ -206,7 +199,9 @@ public class AndroidFragment extends BasicFragment implements IPostView {
 
     @Override
     public void loadMore() {
-        presenter.getPostList(Constants.ANDROID, mRecyclerView, false);
+        if (mRecyclerView != null) {
+            presenter.getPostList(Constants.FULI, mRecyclerView, false);
+        }
     }
 
     @Override
@@ -216,4 +211,5 @@ public class AndroidFragment extends BasicFragment implements IPostView {
                 srf_layout.setRefreshing(dismiss);
             }
     }
+
 }

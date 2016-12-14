@@ -24,10 +24,11 @@ import hailongs.cn.utils.Constants;
 import hailongs.cn.utils.Util;
 
 /**
- * Created by dhl on 2016/12/4.
+ * Created by dhl on 2016/12/13.
  */
 
-public class AndroidFragment extends BasicFragment implements IPostView {
+public class RelaxFragment extends BasicFragment implements IPostView {
+
 
     @Bind(R.id.srf_ly)
     SwipeRefreshLayout srf_layout;
@@ -39,14 +40,14 @@ public class AndroidFragment extends BasicFragment implements IPostView {
     private boolean isHasLoadOnce = false;
 
     private IPostPresenter presenter;
-    static AndroidFragment fragment = null;
+    static RelaxFragment fragment = null;
     static Bundle bundle = null;
 
     int time = 0;
 
-    public static AndroidFragment newInstance(String tag) {
+    public static RelaxFragment newInstance(String tag) {
         if (fragment == null) {
-            fragment = new AndroidFragment();
+            fragment = new RelaxFragment();
         }
         if (bundle == null) {
             bundle = new Bundle();
@@ -131,10 +132,7 @@ public class AndroidFragment extends BasicFragment implements IPostView {
         super.onDestroy();
         Logger.i("调用A onDestroy");
         Logger.i("调用A onDestroyView");
-        ViewGroup parent = null;
-        if (rootView != null) {
-            parent = (ViewGroup) rootView.getParent();
-        }
+        ViewGroup parent = (ViewGroup) rootView.getParent();
         if (parent != null) {
             parent.removeView(rootView);
         }
@@ -192,7 +190,7 @@ public class AndroidFragment extends BasicFragment implements IPostView {
 
     @Override
     public void getDatas() {
-        presenter.getPostList(Constants.ANDROID, mRecyclerView, true);
+        presenter.getPostList(Constants.RELAX, mRecyclerView, true);
         isHasLoadOnce = true;
     }
 
@@ -206,7 +204,7 @@ public class AndroidFragment extends BasicFragment implements IPostView {
 
     @Override
     public void loadMore() {
-        presenter.getPostList(Constants.ANDROID, mRecyclerView, false);
+        presenter.getPostList(Constants.RELAX, mRecyclerView, false);
     }
 
     @Override

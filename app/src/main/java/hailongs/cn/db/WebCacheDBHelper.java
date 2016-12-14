@@ -7,19 +7,18 @@ import android.database.sqlite.SQLiteOpenHelper;
 import hailongs.cn.utils.Constants;
 
 /**
- * Created by dhl on 2016/12/8.
+ * Created by dhl on 2016/12/10.
  */
 
-public class CacheDBHelper extends SQLiteOpenHelper {
+public class WebCacheDBHelper extends SQLiteOpenHelper {
 
-    private final static String SQL = "create table if not exists cache(" +
+    private final static String SQL = "create table if not exists Cache (" +
             "id INTEGER primary key autoincrement," +
-            "type int unique," +
-            "json TEXT" +
-            ")";
+            "newsId INTEGER unique," +
+            "json TEXT)";
 
-    public CacheDBHelper(Context mContext, int version) {
-        super(mContext, Constants.DB_NAME, null, version);
+    public WebCacheDBHelper(Context mContext, int version) {
+        super(mContext, Constants.WEB_DB_NAME, null, version);
     }
 
     @Override

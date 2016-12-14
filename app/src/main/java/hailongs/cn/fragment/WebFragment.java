@@ -21,6 +21,7 @@ import hailongs.cn.mvp.presenter.iimpl.IPostPresenter;
 import hailongs.cn.mvp.presenter.impl.PostPresenter;
 import hailongs.cn.mvp.view.iimpl.IPostView;
 import hailongs.cn.utils.Constants;
+import hailongs.cn.utils.Util;
 
 /**
  * Created by dhl on 2016/12/4.
@@ -32,9 +33,12 @@ public class WebFragment extends BasicFragment implements IPostView {
     SwipeRefreshLayout srf_layout;
     @Bind(R.id.rv_list)
     RecyclerView mRecyclerView;
-    Context mContext;
+    private Context mContext;
+    private View rootView = null;
+    private boolean isPrepared = false;
+    private boolean isHasLoadOnce = false;
 
-    IPostPresenter presenter;
+    private IPostPresenter presenter;
     static WebFragment fragment = null;
     static Bundle bundle = null;
 
@@ -80,19 +84,26 @@ public class WebFragment extends BasicFragment implements IPostView {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.post_content, container, false);
-        ButterKnife.bind(this, view);
-        Logger.i("调 onCreateView");
-        initViews(view);
-        return view;
+        if (rootView == null) {
+            rootView = inflater.inflate(R.layout.post_content, container, false);
+            ButterKnife.bind(this, rootView);
+            mContext = rootView.getContext();
+            initViews(rootView);
+            isPrepared = true;
+        }
+        ViewGroup parent = (ViewGroup) rootView.getParent();
+        if (parent != null) {
+            parent.removeView(rootView);
+        }
+        Logger.i("调用 onCreateView");
+        lazyLoad();
+        return rootView;
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         Logger.i("调 onViewCreated");
-        presenter = new PostPresenter(this, mContext);
-        getDatas();
     }
 
     @Override
@@ -119,6 +130,13 @@ public class WebFragment extends BasicFragment implements IPostView {
     public void onDestroy() {
         super.onDestroy();
         Logger.i("调 onDestroy");
+        ViewGroup parent = (ViewGroup) rootView.getParent();
+        if (parent != null) {
+            parent.removeView(rootView);
+        }
+        if (rootView != null) {
+            ButterKnife.unbind(this);
+        }
     }
 
     @Override
@@ -128,7 +146,14 @@ public class WebFragment extends BasicFragment implements IPostView {
 
     @Override
     public void initViews(View view) {
-        mContext = mRecyclerView.getContext();
+        if (view == null) {
+            Logger.i("rootView == null");
+        } else {
+            if (mRecyclerView == null) {
+                Logger.i("recyclerview == null");
+            }
+        }
+        presenter = new PostPresenter(this, mContext);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(mContext));
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -138,15 +163,18 @@ public class WebFragment extends BasicFragment implements IPostView {
 
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
-                int lastItem = linearLayoutManager.findLastCompletelyVisibleItemPosition();
-                int allItem = linearLayoutManager.getItemCount() - 2;
-                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-                    if (lastItem >= allItem) {
-                        //拉取数据
-                        loadMore();
-                    }
-                    //根据返回数据条数设置
+//                LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+//                int lastItem = linearLayoutManager.findLastCompletelyVisibleItemPosition();
+//                int allItem = linearLayoutManager.getItemCount() - 2;
+//                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+//                    if (lastItem >= allItem) {
+//                        //拉取数据
+//                        loadMore();
+//                    }
+//                }
+                boolean isSlideToBottom = Util.isSlideToBottom(recyclerView);
+                if (isSlideToBottom) {
+                    loadMore();
                 }
             }
         });
@@ -163,11 +191,15 @@ public class WebFragment extends BasicFragment implements IPostView {
     @Override
     public void getDatas() {
         presenter.getPostList(Constants.WEB, mRecyclerView, true);
+        isHasLoadOnce = true;
     }
 
     @Override
     public void lazyLoad() {
-
+        if (!isPrepared || !isVisible || isHasLoadOnce) {
+            return;
+        }
+        getDatas();
     }
 
     @Override
@@ -177,8 +209,9 @@ public class WebFragment extends BasicFragment implements IPostView {
 
     @Override
     public void dismissRefreshLayout(boolean dismiss) {
-        if (!(srf_layout.isRefreshing() == dismiss)) {
-            srf_layout.setRefreshing(dismiss);
-        }
+        if (srf_layout != null)
+            if (!(srf_layout.isRefreshing() == dismiss)) {
+                srf_layout.setRefreshing(dismiss);
+            }
     }
 }

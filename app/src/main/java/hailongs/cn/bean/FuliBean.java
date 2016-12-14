@@ -4,18 +4,17 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
- * Created by dhl on 2016/11/25.
+ * Created by dhl on 2016/12/14.
  */
 
-public class Post {
+public class FuliBean {
 
     /**
      * error : false
-     * results : [{"_id":"5833c3b3421aa926e43aef90","createdAt":"2016-11-22T12:04:03.555Z","desc":"随着 Android 引入 Java 8 的一些功能，请记住每一个标准库的 API 和语言特性都会带来一些相关的开销，这很重要。虽然设备越来越快而且内存越来越多，代码大小和性能优化之间仍然是有着紧密关联的。","images":["http://img.gank.io/b530a4e3-9ec8-4166-8c8f-fdd29e11c0d5","http://img.gank.io/8b3cf104-4b27-4dbd-8407-769d622ca077"],"publishedAt":"2016-11-23T11:27:52.847Z","source":"web","type":"Android","url":"https://realm.io/cn/news/360andev-jake-wharton-java-hidden-costs-android/","used":true,"who":"Chen Mulong"}]
+     * results : [{"_id":"585096f2421aa93437406727","createdAt":"2016-12-14T08:48:50.506Z","desc":"12-14","publishedAt":"2016-12-14T11:39:22.686Z","source":"chrome","type":"福利","url":"http://ww2.sinaimg.cn/large/610dc034gw1faq15nnc0xj20u00u0wlq.jpg","used":true,"who":"代码家"},{"_id":"584f3bd6421aa934405ccfa7","createdAt":"2016-12-13T08:07:50.411Z","desc":"12-13","publishedAt":"2016-12-13T11:42:38.536Z","source":"chrome","type":"福利","url":"http://ww4.sinaimg.cn/large/610dc034jw1faoucp1idej20u011h0va.jpg","used":true,"who":"daimajia"},{"_id":"584dffdd421aa963eaaee172","createdAt":"2016-12-12T09:39:41.294Z","desc":"12-12","publishedAt":"2016-12-12T11:30:54.254Z","source":"chrome","type":"福利","url":"http://ww4.sinaimg.cn/large/610dc034jw1fanrdyaxi6j20u00k1ta9.jpg","used":true,"who":"daimajia"},{"_id":"584a0130421aa963f321b040","createdAt":"2016-12-09T08:56:16.913Z","desc":"12-9","publishedAt":"2016-12-09T11:33:12.481Z","source":"chrome","type":"福利","url":"http://ww2.sinaimg.cn/large/610dc034jw1fak99uh554j20u00u0n09.jpg","used":true,"who":"代码家"},{"_id":"5848c92e421aa963efd90da4","createdAt":"2016-12-08T10:45:02.271Z","desc":"12-8","publishedAt":"2016-12-08T11:42:08.186Z","source":"chrome","type":"福利","url":"http://ww1.sinaimg.cn/large/610dc034jw1faj6sozkluj20u00nt75p.jpg","used":true,"who":"代码家"}]
      */
 
     private boolean error;
@@ -39,16 +38,15 @@ public class Post {
 
     public static class ResultsBean implements Parcelable {
         /**
-         * _id : 5833c3b3421aa926e43aef90
-         * createdAt : 2016-11-22T12:04:03.555Z
-         * desc : 随着 Android 引入 Java 8 的一些功能，请记住每一个标准库的 API 和语言特性都会带来一些相关的开销，这很重要。虽然设备越来越快而且内存越来越多，代码大小和性能优化之间仍然是有着紧密关联的。
-         * images : ["http://img.gank.io/b530a4e3-9ec8-4166-8c8f-fdd29e11c0d5","http://img.gank.io/8b3cf104-4b27-4dbd-8407-769d622ca077"]
-         * publishedAt : 2016-11-23T11:27:52.847Z
-         * source : web
-         * type : Android
-         * url : https://realm.io/cn/news/360andev-jake-wharton-java-hidden-costs-android/
+         * _id : 585096f2421aa93437406727
+         * createdAt : 2016-12-14T08:48:50.506Z
+         * desc : 12-14
+         * publishedAt : 2016-12-14T11:39:22.686Z
+         * source : chrome
+         * type : 福利
+         * url : http://ww2.sinaimg.cn/large/610dc034gw1faq15nnc0xj20u00u0wlq.jpg
          * used : true
-         * who : Chen Mulong
+         * who : 代码家
          */
 
         private String _id;
@@ -60,8 +58,6 @@ public class Post {
         private String url;
         private boolean used;
         private String who;
-        private List<String> images;
-
 
         public String get_id() {
             return _id;
@@ -135,14 +131,6 @@ public class Post {
             this.who = who;
         }
 
-        public List<String> getImages() {
-            return images;
-        }
-
-        public void setImages(List<String> images) {
-            this.images = images;
-        }
-
         @Override
         public int describeContents() {
             return 0;
@@ -159,26 +147,19 @@ public class Post {
             dest.writeString(url);
             dest.writeInt((used ? 1 : 0));
             dest.writeString(who);
-            if (images != null) {
-                String[] imageArr = new String[images.size()];
-                for (int index = 0; index < images.size(); index++) {
-                    imageArr[index] = images.get(index);
-                }
-                dest.writeStringArray(imageArr);
-            }
         }
 
-        public static final Parcelable.Creator<ResultsBean> CREATOR = new Parcelable.Creator<ResultsBean>() {
+        public static final Parcelable.Creator<FuliBean.ResultsBean> CREATOR = new Parcelable.Creator<FuliBean.ResultsBean>() {
 
             @SuppressWarnings("unchecked")
             @Override
-            public ResultsBean createFromParcel(Parcel source) {
-                return new ResultsBean(source);
+            public FuliBean.ResultsBean createFromParcel(Parcel source) {
+                return new FuliBean.ResultsBean(source);
             }
 
             @Override
-            public ResultsBean[] newArray(int size) {
-                return new ResultsBean[size];
+            public FuliBean.ResultsBean[] newArray(int size) {
+                return new FuliBean.ResultsBean[size];
             }
 
         };
@@ -193,12 +174,6 @@ public class Post {
             url = bean.readString();
             used = (bean.readInt() == 1) ? true : false;
             who = bean.readString();
-            String[] imageArr = bean.createStringArray();
-            List<String> list = new ArrayList<>();
-            for (int index = 0; index < imageArr.length; index++) {
-                list.add(imageArr[index]);
-            }
-            images = list;
         }
     }
 }

@@ -1,24 +1,18 @@
 package hailongs.cn.gankdemo;
 
-import android.app.Dialog;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
-import android.webkit.WebChromeClient;
-import android.webkit.WebSettings;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -27,6 +21,11 @@ import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.drawee.interfaces.DraweeController;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.orhanobut.logger.Logger;
+import com.tencent.smtt.export.external.interfaces.IX5WebChromeClient;
+import com.tencent.smtt.sdk.WebChromeClient;
+import com.tencent.smtt.sdk.WebSettings;
+import com.tencent.smtt.sdk.WebView;
+import com.tencent.smtt.sdk.WebViewClient;
 
 import java.io.File;
 
@@ -39,19 +38,30 @@ import hailongs.cn.utils.Constants;
 public class PostDetail extends AppCompatActivity {
 
     @Bind(R.id.wv_detail)
-    private WebView mWebView;
+    WebView mWebView;
     @Bind(R.id.toolbar)
-    private Toolbar mToolbar;
+    Toolbar mToolbar;
     @Bind(R.id.ly_loading)
-    private LinearLayout ly_loading;
+    LinearLayout ly_loading;
     @Bind(R.id.sdv_loading)
-    private SimpleDraweeView sdv_loading;
+    SimpleDraweeView sdv_loading;
     @Bind(R.id.tv_loading)
-    private TextView tv_loading;
+    TextView tv_loading;
+
+    @Bind(R.id.fl_video)
+    FrameLayout fl_video;
+    VideoWebChromeClient videoWebChromeClient;
+    private View videoView = null;
+    private IX5WebChromeClient.CustomViewCallback customViewCallback;
 
     //toolbar
+    private LinearLayout toolbar;
     private ImageView iv_back;
     private TextView tv_title;
+
+    private View ly_video_loading;
+    private SimpleDraweeView sdv_video_loading;
+    private TextView tv_video_loading;
 
     private DraweeController mDraweeController;
 
@@ -73,6 +83,7 @@ public class PostDetail extends AppCompatActivity {
             if (bean != null) {
                 url = bean.getUrl();
                 title = bean.getDesc();
+                Logger.e("url = " + url);
             }
         }
 
@@ -80,6 +91,8 @@ public class PostDetail extends AppCompatActivity {
 
         WebSettings webSettings = mWebView.getSettings();
         webSettings.setJavaScriptEnabled(true);
+        webSettings.setJavaScriptCanOpenWindowsAutomatically(true);
+        webSettings.setPluginsEnabled(true);
         mWebView.getSettings().setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
         // 开启DOM storage API 功能
         mWebView.getSettings().setDomStorageEnabled(true);
@@ -106,10 +119,10 @@ public class PostDetail extends AppCompatActivity {
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
-                ly_loading.setVisibility(View.GONE);
             }
         });
-        mWebView.setWebChromeClient(new WebChromeClient());
+        videoWebChromeClient = new VideoWebChromeClient();
+        mWebView.setWebChromeClient(videoWebChromeClient);
         mWebView.loadUrl(url);
 
         clearWebViewCache();
@@ -117,6 +130,7 @@ public class PostDetail extends AppCompatActivity {
 
     public void initView() {
         View view = LayoutInflater.from(this).inflate(R.layout.top_back, null, false);
+        toolbar = (LinearLayout) view.findViewById(R.id.ly_toolbar);
         iv_back = (ImageView) view.findViewById(R.id.iv_back);
         tv_title = (TextView) view.findViewById(R.id.tv_title);
         iv_back.setOnClickListener(new View.OnClickListener() {
@@ -127,8 +141,10 @@ public class PostDetail extends AppCompatActivity {
         });
         tv_title.setText(title);
 
+        mToolbar.setTitle("");
         mToolbar.addView(view);
         setSupportActionBar(mToolbar);
+
 
         String uri = "res://" + this.getPackageName() + "/" + R.drawable.loading;
         mDraweeController = Fresco.newDraweeControllerBuilder()
@@ -200,4 +216,109 @@ public class PostDetail extends AppCompatActivity {
             mWebView.onPause(); // 暂停网页中正在播放的视频
         }
     }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            if (isInVideoView()) {
+                hideVideoView();
+                return true;
+            } else {
+                return super.onKeyDown(keyCode, event);
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {//横屏
+
+        } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {//竖屏
+
+        }
+    }
+
+
+    public boolean isInVideoView() {
+        return (videoView != null);
+    }
+
+    public void hideVideoView() {
+        videoWebChromeClient.onHideCustomView();
+    }
+
+    public class VideoWebChromeClient extends WebChromeClient {
+        DraweeController controller;
+
+        @Override
+        public void onHideCustomView() {
+            super.onHideCustomView();
+            if (videoView == null)//不是全屏播放状态
+                return;
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+            fl_video.setVisibility(View.GONE);
+            // Remove the custom view from its container.
+            fl_video.removeView(videoView);
+            videoView = null;
+            fl_video.setVisibility(View.GONE);
+            customViewCallback.onCustomViewHidden();
+            if (getSupportActionBar() != null) {
+                getSupportActionBar().show();
+            }
+            toolbar.setVisibility(View.VISIBLE);
+            mWebView.setVisibility(View.VISIBLE);
+        }
+
+        @Override
+        public void onShowCustomView(View view, IX5WebChromeClient.CustomViewCallback callback) {
+            super.onShowCustomView(view, callback);
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+            fl_video.setVisibility(View.VISIBLE);
+            mWebView.setVisibility(View.GONE);
+            toolbar.setVisibility(View.GONE);
+            if (getSupportActionBar() != null) {
+                getSupportActionBar().hide();
+            }
+            //如果一个视图已经存在，那么立刻终止并新建一个
+            if (videoView != null) {
+                callback.onCustomViewHidden();
+                return;
+            }
+            fl_video.addView(view);
+            videoView = view;
+            customViewCallback = callback;
+        }
+
+        @Override
+        public View getVideoLoadingProgressView() {
+            if (ly_video_loading == null) {
+                LayoutInflater inflater = LayoutInflater.from(PostDetail.this);
+                ly_video_loading = inflater.inflate(R.layout.loading, null, false);
+            }
+            sdv_video_loading = (SimpleDraweeView) ly_video_loading.findViewById(R.id.sdv_loading);
+            tv_video_loading = (TextView) ly_video_loading.findViewById(R.id.tv_loading);
+            String uri = "res://" + getPackageName() + "/" + R.drawable.loading;
+            controller = Fresco.newDraweeControllerBuilder()
+                    .setUri(Uri.parse(uri))
+                    .setAutoPlayAnimations(true)
+                    .build();
+            sdv_video_loading.setController(controller);
+
+            tv_video_loading.setText("视频加载中...");
+            return ly_video_loading;
+        }
+
+        @Override
+        public void onProgressChanged(WebView webView, int i) {
+            super.onProgressChanged(webView, i);
+            Logger.e("progress = " + i);
+            if(i >= 50){
+                ly_loading.setVisibility(View.GONE);
+            }
+        }
+    }
+
+
 }

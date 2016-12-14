@@ -22,6 +22,7 @@ import hailongs.cn.mvp.presenter.iimpl.IPostPresenter;
 import hailongs.cn.mvp.presenter.impl.PostPresenter;
 import hailongs.cn.mvp.view.iimpl.IPostView;
 import hailongs.cn.utils.Constants;
+import hailongs.cn.utils.Util;
 
 /**
  * Created by dhl on 2016/12/8.
@@ -136,7 +137,7 @@ public class ExtendFragment extends BasicFragment implements IPostView {
             parent.removeView(rootView);
         }
         if (rootView != null) {
-            //ButterKnife.unbind(this);
+            ButterKnife.unbind(this);
         }
     }
 
@@ -153,8 +154,8 @@ public class ExtendFragment extends BasicFragment implements IPostView {
                 Logger.i("recyclerview == null");
             }
         }
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(mContext));
         presenter = new PostPresenter(this, mContext);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(mContext));
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -163,16 +164,20 @@ public class ExtendFragment extends BasicFragment implements IPostView {
 
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
-                int lastItem = linearLayoutManager.findLastCompletelyVisibleItemPosition();
-                int allItem = linearLayoutManager.getItemCount() - 2;
-                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-                    if (lastItem >= allItem) {
-                        //拉取数据
-                        Logger.e("拉取数据");
-                        loadMore();
-                    }
-                    //根据返回数据条数设置
+//                LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+//                int lastItem = linearLayoutManager.findLastCompletelyVisibleItemPosition();
+//                int allItem = linearLayoutManager.getItemCount() - 2;
+//                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+//                    if (lastItem >= allItem) {
+//                        //拉取数据
+//                        Logger.e("拉取数据");
+//                        loadMore();
+//                    }
+//                    //根据返回数据条数设置
+//                }
+                boolean isSlideToBottom = Util.isSlideToBottom(recyclerView);
+                if (isSlideToBottom) {
+                    loadMore();
                 }
             }
         });

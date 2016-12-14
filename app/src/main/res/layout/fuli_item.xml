@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cv_item"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    android:orientation="vertical"
+    fresco:cardCornerRadius="5dp"
+    fresco:cardElevation="2dp"
+    fresco:contentPadding="8dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="8dp">
+
+        <com.facebook.drawee.view.SimpleDraweeView
+            android:id="@+id/sdv_item"
+            android:layout_width="match_parent"
+            android:layout_height="168dp"
+            android:maxHeight="196dp"
+            fresco:actualImageScaleType="centerInside"
+            fresco:fadeDuration="300"
+            fresco:progressBarAutoRotateInterval="1500"
+            fresco:progressBarImage="@drawable/progress_bar"
+            fresco:progressBarImageScaleType="centerInside" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="24dp"
+            android:layout_marginTop="8dp"
+            android:gravity="center">
+
+            <TextView
+                android:id="@+id/tv_author"
+                android:layout_width="wrap_content"
+                android:layout_height="24dp"
+                android:layout_alignParentLeft="true"
+                android:text="瞎搞"
+                android:textStyle="italic" />
+
+            <TextView
+                android:id="@+id/tv_desc"
+                android:layout_width="wrap_content"
+                android:layout_height="24dp"
+                android:layout_alignParentRight="true"
+                android:text="瞎搞"
+                android:textStyle="italic" />
+        </RelativeLayout>
+    </LinearLayout>
+</android.support.v7.widget.CardView>

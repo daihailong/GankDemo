@@ -7,6 +7,38 @@
     android:layout_height="match_parent"
     tools:context="hailongs.cn.gankdemo.PostDetail">
 
+
+    <FrameLayout
+        android:id="@+id/fl_video"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <android.support.design.widget.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_alignParentTop="true"
+            app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="@color/colorPrimary"
+                app:popupTheme="@style/PopupOverlay" />
+        </android.support.design.widget.AppBarLayout>
+
+        <com.tencent.smtt.sdk.WebView
+            android:id="@+id/wv_detail"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"></com.tencent.smtt.sdk.WebView>
+    </LinearLayout>
+
     <LinearLayout
         android:id="@+id/ly_loading"
         android:layout_width="match_parent"
@@ -29,27 +61,5 @@
             android:layout_height="64dp"
             android:gravity="center"
             android:textSize="15sp" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-
-        <android.support.design.widget.AppBarLayout
-            android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:layout_alignParentTop="true"
-            app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
-
-            <android.support.v7.widget.Toolbar
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:background="@color/colorPrimary"
-                app:popupTheme="@style/PopupOverlay" />
-        </android.support.design.widget.AppBarLayout>
-
-        <include layout="@layout/content_post_detail" />
     </LinearLayout>
 </RelativeLayout>

@@ -36,15 +36,20 @@ public class PostFragment extends BasicFragment implements IPostView {
     Context mContext;
     static PostFragment postFragment = null;
     static Bundle bundle = null;
+    AllFragment allFragment = null;
     AndroidFragment androidFragment = null;
     IOSFragment iosFragment = null;
     WebFragment webFragment = null;
+    FuliFragment fuliFragment = null;
+    RelaxFragment relaxFragment = null;
+    RecommendFragment recommendFragment = null;
+    AppFragment appFragment = null;
     ExtendFragment extendFragment = null;
 
     PostVPAdapter adapter = null;
 
     String titles[] = new String[]{
-            "Android", "IOS", "前端", "拓展资源"
+            "全部", "Android", "IOS", "前端", "福利", "休闲视频", "瞎推荐", "App", "拓展资源"
     };
 
     int time = 1;
@@ -84,6 +89,9 @@ public class PostFragment extends BasicFragment implements IPostView {
 
     public List<Fragment> getFragmentList() {
         List<Fragment> fragments = new ArrayList<>();
+        if (allFragment == null) {
+            allFragment = AllFragment.newInstance(Constants.ALL);
+        }
         if (androidFragment == null) {
             androidFragment = AndroidFragment.newInstance(Constants.ANDROID);
         }
@@ -93,12 +101,29 @@ public class PostFragment extends BasicFragment implements IPostView {
         if (webFragment == null) {
             webFragment = WebFragment.newInstance(Constants.WEB);
         }
+        if (fuliFragment == null) {
+            fuliFragment = FuliFragment.newInstance(Constants.FULI);
+        }
+        if (relaxFragment == null) {
+            relaxFragment = RelaxFragment.newInstance(Constants.RELAX);
+        }
+        if (recommendFragment == null) {
+            recommendFragment = RecommendFragment.newInstance(Constants.RECOMMEND);
+        }
+        if (appFragment == null) {
+            appFragment = AppFragment.newInstance(Constants.APP);
+        }
         if (extendFragment == null) {
             extendFragment = ExtendFragment.newInstance(Constants.EXTENDS);
         }
+        fragments.add(allFragment);
         fragments.add(androidFragment);
         fragments.add(iosFragment);
         fragments.add(webFragment);
+        fragments.add(fuliFragment);
+        fragments.add(relaxFragment);
+        fragments.add(recommendFragment);
+        fragments.add(appFragment);
         fragments.add(extendFragment);
         return fragments;
     }
@@ -120,6 +145,7 @@ public class PostFragment extends BasicFragment implements IPostView {
             adapter = new PostVPAdapter(getChildFragmentManager(), list, titles, mContext);
         }
         mViewPager.setAdapter(adapter);
+        mTabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
         mTabLayout.setTabTextColors(getResources().getColor(R.color.unSelectedColor), getResources().getColor(R.color.selectedColor));
         mTabLayout.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
         mTabLayout.setupWithViewPager(mViewPager);
