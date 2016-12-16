@@ -4,6 +4,7 @@ import android.support.v7.widget.RecyclerView;
 
 import com.orhanobut.logger.Logger;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -61,4 +62,58 @@ public class Util {
             return true;
         return false;
     }
+
+//    public void clearWebViewCache() {
+//
+//        //清理Webview缓存数据库
+//        try {
+//            //deleteDatabase("webview.db");
+//            //deleteDatabase("webviewCache.db");
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//
+//        //WebView 缓存文件
+//        File appCacheDir = new File(getFilesDir().getAbsolutePath() + Constants.APP_CACHE_DIRNAME);
+//        Logger.i(TAG + "appCacheDir path=" + appCacheDir.getAbsolutePath());
+//
+//        File webviewCacheDir = new File(getCacheDir().getAbsolutePath() + "/webviewCache");
+//        Logger.i(TAG + "webviewCacheDir path=" + webviewCacheDir.getAbsolutePath());
+//
+//        //删除webview 缓存目录
+//        if (webviewCacheDir.exists()) {
+//            Logger.i("webview缓存目录存在过！");
+//            deleteFile(webviewCacheDir);
+//        }
+//        //删除webview 缓存 缓存目录
+//        if (appCacheDir.exists()) {
+//            Logger.i("app缓存目录存在过！");
+//            deleteFile(appCacheDir);
+//        }
+//    }
+//
+//    /**
+//     * 递归删除 文件/文件夹
+//     *
+//     * @param file
+//     */
+//    public void deleteFile(File file) {
+//
+//        Logger.i(TAG, "delete file path=" + file.getAbsolutePath());
+//
+//        if (file.exists()) {
+//            if (file.isFile()) {
+//                file.delete();
+//            } else if (file.isDirectory()) {
+//                File files[] = file.listFiles();
+//                for (int i = 0; i < files.length; i++) {
+//                    deleteFile(files[i]);
+//                }
+//            }
+//            file.delete();
+//        } else {
+//            Logger.e(TAG, "delete file no exists " + file.getAbsolutePath());
+//        }
+//    }
+
 }

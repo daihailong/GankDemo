@@ -1,5 +1,7 @@
 package hailongs.cn.adapter;
 
+import android.app.Activity;
+import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -30,6 +32,7 @@ import butterknife.ButterKnife;
 import hailongs.cn.R;
 import hailongs.cn.bean.FuliBean;
 import hailongs.cn.gankdemo.ImageActivity;
+import hailongs.cn.gankdemo.MainActivity;
 import hailongs.cn.utils.Constants;
 import hailongs.cn.utils.Util;
 
@@ -39,6 +42,7 @@ import hailongs.cn.utils.Util;
 
 public class FuliAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
+    Activity activity = null;
     List<FuliBean.ResultsBean> bean = new ArrayList<>();
     private int type;
     private boolean isNoMoreDatas = false;
@@ -138,6 +142,8 @@ public class FuliAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
 class PicViewHolder extends RecyclerView.ViewHolder {
 
+    Activity activity = null;
+
     Context mContext = null;
     @Bind(R.id.cv_item)
     CardView cv_item;
@@ -170,7 +176,10 @@ class PicViewHolder extends RecyclerView.ViewHolder {
                 Bundle bundle = new Bundle();
                 bundle.putParcelable(Constants.IMAGE_DETAIL, bean);
                 intent.putExtra(Constants.IMAGE_DETAIL, bundle);
-                mContext.startActivity(intent);
+                //mContext.startActivity(intent);
+                //共享元素动画
+                //mContext.startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(((MainActivity) mContext), sdv_item, "mybtn").toBundle());
+                mContext.startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(((MainActivity) mContext)).toBundle());
             }
         });
     }

@@ -21,6 +21,7 @@
             android:layout_width="match_parent"
             android:layout_height="168dp"
             android:maxHeight="196dp"
+            android:transitionName="myImage"
             fresco:actualImageScaleType="centerInside"
             fresco:fadeDuration="300"
             fresco:progressBarAutoRotateInterval="1500"

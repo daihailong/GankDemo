@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 
 import com.google.gson.Gson;
+import com.orhanobut.logger.Logger;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -25,9 +26,7 @@ import hailongs.cn.adapter.FuliAdapter;
 import hailongs.cn.adapter.PostAdapter;
 import hailongs.cn.bean.FuliBean;
 import hailongs.cn.bean.Post;
-import hailongs.cn.db.CacheDBHelper;
 import hailongs.cn.gankdemo.MainActivity;
-import hailongs.cn.gankdemo.PostDetail;
 import hailongs.cn.mvp.presenter.iimpl.IPostPresenter;
 import hailongs.cn.mvp.view.iimpl.IPostView;
 import hailongs.cn.utils.Constants;
@@ -37,7 +36,6 @@ import okhttp3.Callback;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
-import retrofit2.http.POST;
 
 /**
  * Created by dhl on 2016/11/29.
@@ -182,10 +180,12 @@ public class PostPresenter implements IPostPresenter {
                             @Override
                             public void run() {
                                 allPost.addAll(from, beanList);
-                                allAdapter = (PostAdapter) recyclerView.getAdapter();
+                                if (recyclerView != null) {
+                                    allAdapter = (PostAdapter) recyclerView.getAdapter();
+                                }
                                 if (allAdapter != null) {
                                     allAdapter.notifyItemChanged(from, beanList.size());
-                                } else {
+                                } else if (recyclerView != null) {
                                     initRecyclerView(recyclerView, Constants.ALL);
                                 }
                                 if (beanList.size() < Constants.COUNT) {
@@ -249,8 +249,11 @@ public class PostPresenter implements IPostPresenter {
                                             androidAdapter.notifyDataSetChanged();
                                         } else
                                             androidAdapter.notifyItemChanged(from, beanList.size());
-                                    } else {
+                                    } else if (recyclerView != null) {
                                         initRecyclerView(recyclerView, Constants.ANDROID);
+                                    }
+                                    if (recyclerView == null) {
+                                        Logger.e("shit  all");
                                     }
                                     if (beanList.size() < Constants.COUNT) {
                                         androidAdapter.isNoMoreDatas(true);
@@ -284,8 +287,11 @@ public class PostPresenter implements IPostPresenter {
                             }
                             if (androidAdapter != null && recyclerView != null) {
                                 androidAdapter.notifyDataSetChanged();
-                            } else {
+                            } else if (recyclerView != null) {
                                 initRecyclerView(recyclerView, Constants.ANDROID);
+                            }
+                            if (recyclerView == null) {
+                                Logger.e("shit  android");
                             }
                             postView.dismissRefreshLayout(false);
                         }
@@ -332,11 +338,16 @@ public class PostPresenter implements IPostPresenter {
                             @Override
                             public void run() {
                                 iOSPost.addAll(from, beanList);
-                                iOSAdapter = (PostAdapter) recyclerView.getAdapter();
+                                if (recyclerView != null) {
+                                    iOSAdapter = (PostAdapter) recyclerView.getAdapter();
+                                }
                                 if (iOSAdapter != null) {
                                     iOSAdapter.notifyItemChanged(from, beanList.size());
-                                } else {
+                                } else if (recyclerView != null) {
                                     initRecyclerView(recyclerView, Constants.IOS);
+                                }
+                                if (recyclerView == null) {
+                                    Logger.e("shit  ios");
                                 }
                                 if (beanList.size() < Constants.COUNT) {
                                     iOSAdapter.isNoMoreDatas(true);
@@ -382,11 +393,16 @@ public class PostPresenter implements IPostPresenter {
                             @Override
                             public void run() {
                                 webPost.addAll(from, beanList);
-                                webAdapter = (PostAdapter) recyclerView.getAdapter();
+                                if (recyclerView != null) {
+                                    webAdapter = (PostAdapter) recyclerView.getAdapter();
+                                }
                                 if (webAdapter != null) {
                                     webAdapter.notifyItemChanged(from, beanList.size());
-                                } else {
+                                } else if (recyclerView != null) {
                                     initRecyclerView(recyclerView, Constants.WEB);
+                                }
+                                if (recyclerView == null) {
+                                    Logger.e("shit  web");
                                 }
                                 if (beanList.size() < Constants.COUNT) {
                                     webAdapter.isNoMoreDatas(true);
@@ -432,11 +448,16 @@ public class PostPresenter implements IPostPresenter {
                             @Override
                             public void run() {
                                 fuliPost.addAll(from, beanList);
-                                fuliAdapter = (FuliAdapter) recyclerView.getAdapter();
+                                if (recyclerView != null) {
+                                    fuliAdapter = (FuliAdapter) recyclerView.getAdapter();
+                                }
                                 if (fuliAdapter != null) {
                                     fuliAdapter.notifyItemChanged(from, beanList.size());
-                                } else {
+                                } else if (recyclerView != null) {
                                     initRecyclerView(recyclerView, Constants.FULI);
+                                }
+                                if (recyclerView == null) {
+                                    Logger.e("shit  fuli");
                                 }
                                 if (beanList.size() < Constants.COUNT) {
                                     fuliAdapter.isNoMoreDatas(true);
@@ -482,11 +503,16 @@ public class PostPresenter implements IPostPresenter {
                             @Override
                             public void run() {
                                 extendsPost.addAll(from, beanList);
-                                extendsAdapter = (PostAdapter) recyclerView.getAdapter();
+                                if (recyclerView != null) {
+                                    extendsAdapter = (PostAdapter) recyclerView.getAdapter();
+                                }
                                 if (extendsAdapter != null) {
                                     extendsAdapter.notifyItemChanged(from, beanList.size());
-                                } else {
+                                } else if (recyclerView != null) {
                                     initRecyclerView(recyclerView, Constants.EXTENDS);
+                                }
+                                if (recyclerView == null) {
+                                    Logger.e("shit  extends");
                                 }
                                 if (beanList.size() < Constants.COUNT) {
                                     extendsAdapter.isNoMoreDatas(true);
@@ -532,10 +558,12 @@ public class PostPresenter implements IPostPresenter {
                             @Override
                             public void run() {
                                 relaxPost.addAll(from, beanList);
-                                relaxAdapter = (PostAdapter) recyclerView.getAdapter();
+                                if (recyclerView != null) {
+                                    relaxAdapter = (PostAdapter) recyclerView.getAdapter();
+                                }
                                 if (relaxAdapter != null) {
                                     relaxAdapter.notifyItemChanged(from, beanList.size());
-                                } else {
+                                } else if (recyclerView != null) {
                                     initRecyclerView(recyclerView, Constants.RELAX);
                                 }
                                 if (beanList.size() < Constants.COUNT) {
@@ -579,11 +607,16 @@ public class PostPresenter implements IPostPresenter {
                             @Override
                             public void run() {
                                 recommendPost.addAll(from, beanList);
-                                recommendAdapter = (PostAdapter) recyclerView.getAdapter();
+                                if (recyclerView != null) {
+                                    recommendAdapter = (PostAdapter) recyclerView.getAdapter();
+                                }
                                 if (recommendAdapter != null) {
                                     recommendAdapter.notifyItemChanged(from, beanList.size());
-                                } else {
+                                } else if (recyclerView != null) {
                                     initRecyclerView(recyclerView, Constants.RECOMMEND);
+                                }
+                                if (recyclerView == null) {
+                                    Logger.e("shit  recommend");
                                 }
                                 if (beanList.size() < Constants.COUNT) {
                                     recommendAdapter.isNoMoreDatas(true);
@@ -626,11 +659,16 @@ public class PostPresenter implements IPostPresenter {
                             @Override
                             public void run() {
                                 appPost.addAll(from, beanList);
-                                appAdapter = (PostAdapter) recyclerView.getAdapter();
+                                if (recyclerView != null) {
+                                    appAdapter = (PostAdapter) recyclerView.getAdapter();
+                                }
                                 if (appAdapter != null) {
                                     appAdapter.notifyItemChanged(from, beanList.size());
-                                } else {
+                                } else if (recyclerView != null) {
                                     initRecyclerView(recyclerView, Constants.APP);
+                                }
+                                if (recyclerView == null) {
+                                    Logger.e("shit  app");
                                 }
                                 if (beanList.size() < Constants.COUNT) {
                                     appAdapter.isNoMoreDatas(true);

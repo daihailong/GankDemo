@@ -42,8 +42,6 @@ public class RecommendFragment extends BasicFragment implements IPostView {
     static RecommendFragment fragment = null;
     static Bundle bundle = null;
 
-    int time = 0;
-
     public static RecommendFragment newInstance(String tag) {
         if (fragment == null) {
             fragment = new RecommendFragment();
@@ -87,11 +85,11 @@ public class RecommendFragment extends BasicFragment implements IPostView {
             rootView = inflater.inflate(R.layout.post_content, container, false);
             ButterKnife.bind(this, rootView);
             mContext = rootView.getContext();
-            Logger.i("recyclerview = null ? " + (mRecyclerView == null));
             initViews(rootView);
             isPrepared = true;
+        } else {
+            ButterKnife.bind(this, rootView);
         }
-        Logger.i("recyclerview = null 吗? " + (mRecyclerView == null));
         ViewGroup parent = (ViewGroup) rootView.getParent();
         if (parent != null) {
             parent.removeView(rootView);
@@ -124,18 +122,27 @@ public class RecommendFragment extends BasicFragment implements IPostView {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        Logger.i("调用A onDestroyView");
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
         Logger.i("调用A onDestroy");
-        Logger.i("调用A onDestroyView");
-        ViewGroup parent = (ViewGroup) rootView.getParent();
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        ViewGroup parent = null;
+        if (rootView != null) {
+            parent = (ViewGroup) rootView.getParent();
+        }
         if (parent != null) {
             parent.removeView(rootView);
         }
         if (rootView != null) {
+            Logger.i("调用A onDetach");
             ButterKnife.unbind(this);
         }
     }

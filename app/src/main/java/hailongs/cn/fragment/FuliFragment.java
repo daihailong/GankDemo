@@ -39,7 +39,7 @@ public class FuliFragment extends BasicFragment implements IPostView {
     @Bind(R.id.rv_list)
     RecyclerView mRecyclerView;
     Context mContext;
-    private View rootView = null;
+    private View rootView;
     private boolean isPrepared = false;
     private boolean isHasLoadOnce = false;
 
@@ -64,25 +64,25 @@ public class FuliFragment extends BasicFragment implements IPostView {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        Logger.i("调用A onAttach");
+        Logger.i("调用fuli onAttach");
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        Logger.i("调用A onActivityCreated");
+        Logger.i("调用fuli onActivityCreated");
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Logger.i("调用A onActivityResult");
+        Logger.i("调用fuli onActivityResult");
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Logger.i("调用A onCreate");
+        Logger.i("调用fuli onCreate");
     }
 
     @Nullable
@@ -94,12 +94,15 @@ public class FuliFragment extends BasicFragment implements IPostView {
             mContext = rootView.getContext();
             initViews(rootView);
             isPrepared = true;
+        } else {
+            ButterKnife.bind(this, rootView);
         }
+
         ViewGroup parent = (ViewGroup) rootView.getParent();
         if (parent != null) {
             parent.removeView(rootView);
         }
-        Logger.i("调用A onCreateView");
+        Logger.i("调用fuli onCreateView");
         lazyLoad();
         return rootView;
     }
@@ -107,20 +110,20 @@ public class FuliFragment extends BasicFragment implements IPostView {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        Logger.i("调用A onViewCreated");
+        Logger.i("调用fuli onViewCreated");
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        Logger.i("调用A onResume");
+        Logger.i("调用fuli onResume");
         this.isVisible = true;
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        Logger.i("调用A onStop");
+        Logger.i("调用fuli onStop");
         this.isVisible = false;
     }
 
@@ -132,13 +135,20 @@ public class FuliFragment extends BasicFragment implements IPostView {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Logger.i("调用A onDestroy");
-        Logger.i("调用A onDestroyView");
-        ViewGroup parent = (ViewGroup) rootView.getParent();
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        ViewGroup parent = null;
+        if (rootView != null) {
+            parent = (ViewGroup) rootView.getParent();
+        }
         if (parent != null) {
             parent.removeView(rootView);
         }
         if (rootView != null) {
+            Logger.i("调用fuli onDestroy");
             ButterKnife.unbind(this);
         }
     }
@@ -155,6 +165,9 @@ public class FuliFragment extends BasicFragment implements IPostView {
             if (mRecyclerView == null) {
                 Logger.i("recyclerview == null");
             }
+        }
+        if (mRecyclerView == null) {
+            Logger.i("fuli recyclerview == null");
         }
         mRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
         presenter = new PostPresenter(this, mContext);

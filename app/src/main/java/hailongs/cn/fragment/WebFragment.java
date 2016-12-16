@@ -90,7 +90,10 @@ public class WebFragment extends BasicFragment implements IPostView {
             mContext = rootView.getContext();
             initViews(rootView);
             isPrepared = true;
+        } else {
+            ButterKnife.bind(this, rootView);
         }
+        
         ViewGroup parent = (ViewGroup) rootView.getParent();
         if (parent != null) {
             parent.removeView(rootView);
@@ -130,11 +133,20 @@ public class WebFragment extends BasicFragment implements IPostView {
     public void onDestroy() {
         super.onDestroy();
         Logger.i("调 onDestroy");
-        ViewGroup parent = (ViewGroup) rootView.getParent();
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        ViewGroup parent = null;
+        if (rootView != null) {
+            parent = (ViewGroup) rootView.getParent();
+        }
         if (parent != null) {
             parent.removeView(rootView);
         }
         if (rootView != null) {
+            Logger.i("调用A onDetach");
             ButterKnife.unbind(this);
         }
     }

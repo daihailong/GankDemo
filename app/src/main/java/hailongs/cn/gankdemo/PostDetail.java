@@ -12,6 +12,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -119,13 +120,14 @@ public class PostDetail extends AppCompatActivity {
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
+                ly_loading.setVisibility(View.GONE);
             }
         });
         videoWebChromeClient = new VideoWebChromeClient();
         mWebView.setWebChromeClient(videoWebChromeClient);
         mWebView.loadUrl(url);
 
-        clearWebViewCache();
+        //clearWebViewCache();
     }
 
     public void initView() {
@@ -154,59 +156,6 @@ public class PostDetail extends AppCompatActivity {
         sdv_loading.setController(mDraweeController);
 
         tv_loading.setText("拼命加载中...");
-    }
-
-    public void clearWebViewCache() {
-
-        //清理Webview缓存数据库
-        try {
-            //deleteDatabase("webview.db");
-            //deleteDatabase("webviewCache.db");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        //WebView 缓存文件
-        File appCacheDir = new File(getFilesDir().getAbsolutePath() + Constants.APP_CACHE_DIRNAME);
-        Logger.i(TAG + "appCacheDir path=" + appCacheDir.getAbsolutePath());
-
-        File webviewCacheDir = new File(getCacheDir().getAbsolutePath() + "/webviewCache");
-        Logger.i(TAG + "webviewCacheDir path=" + webviewCacheDir.getAbsolutePath());
-
-        //删除webview 缓存目录
-        if (webviewCacheDir.exists()) {
-            Logger.i("webview缓存目录存在过！");
-            deleteFile(webviewCacheDir);
-        }
-        //删除webview 缓存 缓存目录
-        if (appCacheDir.exists()) {
-            Logger.i("app缓存目录存在过！");
-            deleteFile(appCacheDir);
-        }
-    }
-
-    /**
-     * 递归删除 文件/文件夹
-     *
-     * @param file
-     */
-    public void deleteFile(File file) {
-
-        Logger.i(TAG, "delete file path=" + file.getAbsolutePath());
-
-        if (file.exists()) {
-            if (file.isFile()) {
-                file.delete();
-            } else if (file.isDirectory()) {
-                File files[] = file.listFiles();
-                for (int i = 0; i < files.length; i++) {
-                    deleteFile(files[i]);
-                }
-            }
-            file.delete();
-        } else {
-            Logger.e(TAG, "delete file no exists " + file.getAbsolutePath());
-        }
     }
 
     @Override
@@ -258,26 +207,27 @@ public class PostDetail extends AppCompatActivity {
             if (videoView == null)//不是全屏播放状态
                 return;
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-            fl_video.setVisibility(View.GONE);
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+            toolbar.setVisibility(View.VISIBLE);
+            mWebView.setVisibility(View.VISIBLE);
             // Remove the custom view from its container.
             fl_video.removeView(videoView);
+            fl_video.setVisibility(View.GONE);
             videoView = null;
             fl_video.setVisibility(View.GONE);
             customViewCallback.onCustomViewHidden();
             if (getSupportActionBar() != null) {
                 getSupportActionBar().show();
             }
-            toolbar.setVisibility(View.VISIBLE);
-            mWebView.setVisibility(View.VISIBLE);
         }
 
         @Override
         public void onShowCustomView(View view, IX5WebChromeClient.CustomViewCallback callback) {
             super.onShowCustomView(view, callback);
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-            fl_video.setVisibility(View.VISIBLE);
-            mWebView.setVisibility(View.GONE);
             toolbar.setVisibility(View.GONE);
+            mWebView.setVisibility(View.GONE);
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
             if (getSupportActionBar() != null) {
                 getSupportActionBar().hide();
             }
@@ -287,6 +237,7 @@ public class PostDetail extends AppCompatActivity {
                 return;
             }
             fl_video.addView(view);
+            fl_video.setVisibility(View.VISIBLE);
             videoView = view;
             customViewCallback = callback;
         }
@@ -314,9 +265,7 @@ public class PostDetail extends AppCompatActivity {
         public void onProgressChanged(WebView webView, int i) {
             super.onProgressChanged(webView, i);
             Logger.e("progress = " + i);
-            if(i >= 50){
-                ly_loading.setVisibility(View.GONE);
-            }
+
         }
     }
 

@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.transition.Explode;
 import android.transition.Fade;
 import android.view.View;
 import android.view.Window;
@@ -29,6 +30,7 @@ import butterknife.OnLongClick;
 import hailongs.cn.R;
 import hailongs.cn.bean.FuliBean;
 import hailongs.cn.utils.Constants;
+import hailongs.cn.utils.StatusBarUtil;
 
 public class ImageActivity extends AppCompatActivity {
 
@@ -44,8 +46,11 @@ public class ImageActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_image);
+        getWindow().setEnterTransition(new Fade().setDuration(2000));
+        getWindow().setExitTransition(new Fade().setDuration(2000));
+        StatusBarUtil.setWindowStatusBarColor(this, R.color.primaryTextColor);
         ButterKnife.bind(this);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         Intent intent = getIntent();
         Bundle bundle = intent.getBundleExtra(Constants.IMAGE_DETAIL);
         if (bundle != null) {
@@ -61,8 +66,8 @@ public class ImageActivity extends AppCompatActivity {
             @Override
             public CloseableReference<Bitmap> process(Bitmap sourceBitmap, PlatformBitmapFactory bitmapFactory) {
                 CloseableReference<Bitmap> bitmapRef = bitmapFactory.createBitmap(
-                        sourceBitmap.getWidth() *3/ 4,
-                        sourceBitmap.getHeight()*3/4);
+                        sourceBitmap.getWidth() * 3 / 4,
+                        sourceBitmap.getHeight() * 3 / 4);
                 try {
                     Bitmap destBitmap = bitmapRef.get();
                     for (int x = 0; x < destBitmap.getWidth(); x += 2) {

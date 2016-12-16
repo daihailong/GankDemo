@@ -13,6 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         fresco:actualImageScaleType="centerInside"
+        android:transitionName="myImage"
         fresco:fadeDuration="300" />
 
 </RelativeLayout>

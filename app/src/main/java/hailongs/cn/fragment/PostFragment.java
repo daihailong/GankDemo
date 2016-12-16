@@ -48,6 +48,8 @@ public class PostFragment extends BasicFragment implements IPostView {
 
     PostVPAdapter adapter = null;
 
+    private View rootView;
+
     String titles[] = new String[]{
             "全部", "Android", "IOS", "前端", "福利", "休闲视频", "瞎推荐", "App", "拓展资源"
     };
@@ -75,16 +77,19 @@ public class PostFragment extends BasicFragment implements IPostView {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.post_fragment, container, false);
-        ButterKnife.bind(this, view);
+
+        rootView = inflater.inflate(R.layout.post_fragment, container, false);
+        ButterKnife.bind(this, rootView);
+        initViews();
         Logger.i("Post 的onCreateView 第 " + time++ + " 次创建");
-        return view;
+
+        return rootView;
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        initViews();
+        Logger.i("Post 的onViewCreated 第 " + time++ + " 次创建");
     }
 
     public List<Fragment> getFragmentList() {
@@ -152,6 +157,26 @@ public class PostFragment extends BasicFragment implements IPostView {
         for (int index = 0; index < mTabLayout.getTabCount(); index++) {
             TabLayout.Tab tab = mTabLayout.getTabAt(index);
             tab.setCustomView(adapter.getTabView(index));
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        ViewGroup parent = null;
+        if (rootView != null) {
+            parent = (ViewGroup) rootView.getParent();
+        }
+        if (parent != null) {
+            parent.removeView(rootView);
+        }
+        if (rootView != null) {
+            ButterKnife.unbind(this);
         }
     }
 
